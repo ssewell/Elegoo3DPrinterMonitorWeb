@@ -29,6 +29,7 @@ body {
   display: flex;
   height: 300px;
   width: 600px;
+  margin-top: 1.5em;
 }
 
 .printer-header {
