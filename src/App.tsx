@@ -1,24 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import "./App.css";
+import { PrinterItem } from "./types/PrinterTypes";
+import Printer from "./components/Printer";
 
 function App() {
+  const [data, setData] = useState<Record<string, PrinterItem>>({});
+
+  useEffect(() => {
+    // Create a WebSocket connection to the server
+    const socket = io("http://localhost:5000");
+
+    // Listen for messages from the server
+    socket.on("message", (udpData: any) => {
+      const udpDataJson = JSON.parse(udpData);
+      setData((prevData) => ({
+        ...prevData,
+        [udpDataJson.Id]: udpDataJson,
+      }));
+    });
+
+    // Cleanup the socket connection when the component unmounts
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {Object.entries(data).map(([id, value]) => (
+        <Printer key={id} item={value} debug={false} />
+      ))}
     </div>
   );
 }
