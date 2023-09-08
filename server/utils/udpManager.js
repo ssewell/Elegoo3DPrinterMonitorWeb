@@ -48,7 +48,7 @@ function createUDPClient() {
   }, BROADCAST_INTERVAL);
 }
 
-function createUDPServer(webSocket) {
+function createUDPServer() {
   socket.on("listening", () => {
     const address = socket.address();
     console.log(`UDP Server listening on ${address.address}:${address.port}`);
@@ -60,13 +60,13 @@ function createUDPServer(webSocket) {
     }
 
     console.log("Got data from address:", remote.address);
-
-    webSocket.emit("message", message.toString());
   });
 
   socket.on("error", (error) => {
     console.error("Error:", error);
   });
+
+  return socket;
 }
 
-module.exports = { createUDPClient, createUDPServer };
+module.exports = { getLocalIPs, createUDPClient, createUDPServer };

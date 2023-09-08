@@ -1,4 +1,8 @@
-const { createUDPServer, createUDPClient } = require("./utils/udpManager.js");
+const {
+  createUDPServer,
+  createUDPClient,
+  getLocalIPs,
+} = require("./utils/udpManager.js");
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
@@ -10,23 +14,35 @@ const server = http.createServer(app);
 // Allow all CORS
 app.use(cors());
 
+const localIPs = getLocalIPs();
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Your react app's origin
+    origin: [
+      "http://localhost:3000",
+      ...localIPs.map((ip) => `http://${ip}:3000`),
+    ], // Your react app's origin
     methods: ["GET", "POST"],
   },
 });
 
+const udpServer = createUDPServer();
+createUDPClient();
+
 io.on("connection", (socket) => {
   console.log("New client connected");
 
-  createUDPServer(socket); // Listen for Elegoo printer responses
-  createUDPClient(); // Broadcast status requests
-
   socket.on("disconnect", () => {
-    // TODO: Teard down the UDP server and client
     console.log("Client disconnected");
   });
+});
+
+udpServer.on("message", (message, remote) => {
+  if (localIPs.includes(remote.address)) {
+    return;
+  }
+  // Broadcast the message to all WebSocket clients
+  io.emit("message", message.toString());
 });
 
 server.listen(5000, () => {
