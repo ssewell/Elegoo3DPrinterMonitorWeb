@@ -11,6 +11,9 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 
+const serverHostname = process.env.ELEGOO_MONITOR_SERVER_HOSTNAME;
+console.log("Server Hostname: ", serverHostname);
+
 // Allow all CORS
 app.use(cors());
 
@@ -21,7 +24,8 @@ const io = new Server(server, {
     origin: [
       "http://localhost:3000",
       ...localIPs.map((ip) => `http://${ip}:3000`),
-    ], // Your react app's origin
+      ...(serverHostname ? [serverHostname] : []),
+    ],
     methods: ["GET", "POST"],
   },
 });
@@ -46,5 +50,5 @@ udpServer.on("message", (message, remote) => {
 });
 
 server.listen(5000, () => {
-  console.log("Server is listening on http://localhost:5000");
+  console.log("Websocket server is listening on http://0.0.0.0:5000");
 });
