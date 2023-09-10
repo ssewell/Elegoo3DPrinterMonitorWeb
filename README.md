@@ -6,7 +6,7 @@ The [standalone version](https://github.com/ssewell/Elegoo3DPrinterMonitor) is r
 
 Once you've pulled this repo locally, you have the option of running as a local server or as a docker conatiner.
 
-The application must be accessed via the IP address on port 3000 (e.g. http://[ip address]:3000). If you wish to access it via a host name, you must set the environment variable "ELEGOO_MONITOR_SERVER_HOSTNAME", specifying the FQDN including the port (e.g. http://[server hostname]:3000)
+The application must be accessed via the IP address on port 3000 (e.g. http://[ip address]:3000). If you wish to access it via a host name, you must set the environment variable "ELEGOO_MONITOR_SERVER_HOSTNAME", specifying the hostname including the port (e.g. http://[server hostname]:3000)
 
 ### Running Local Server
 
