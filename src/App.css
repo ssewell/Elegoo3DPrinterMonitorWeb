@@ -28,7 +28,7 @@ body {
   border-radius: 10px;
   display: flex;
   height: 300px;
-  width: 600px;
+  min-width: 600px;
   margin-top: 1.5em;
 }
 
