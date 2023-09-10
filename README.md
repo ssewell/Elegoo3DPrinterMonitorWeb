@@ -31,7 +31,7 @@ Build the Docker container:
 docker build -t elegoo3dprintermonitorweb:latest .
 ```
 
-Run the docker conatiner:
+Run the docker container (The ELEGOO_MONITOR_SERVER_HOSTNAME environment variable here is optional and only needed if you are not accessing the server by IP address):
 
 ```shell
 docker run --network="host" -e ELEGOO_MONITOR_SERVER_HOSTNAME='http://[your servername]:3000' elegoo3dprintermonitorweb:latest
