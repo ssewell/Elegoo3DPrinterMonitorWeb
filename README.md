@@ -10,9 +10,10 @@ The application must be accessed via the IP address on port 3000 (e.g. http://[i
 
 ### Running Local Server
 
-Build the application:
+Setup and build the application:
 
 ```shell
+npm ci
 npm run build
 ```
 
