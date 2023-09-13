@@ -5,6 +5,8 @@ import "./components/ProgressBar.css";
 import { PrinterItem } from "./types/PrinterTypes";
 import Printer from "./components/Printer";
 
+const RESPONSE_ID = "f25273b12b094c5a8b9513a30ca60049"; // Id included in valid JSON response from 3D printer
+
 function App() {
   const [data, setData] = useState<Record<string, PrinterItem>>({});
 
@@ -18,10 +20,13 @@ function App() {
 
     // Listen for messages from the server
     socket.on("message", (udpData: any) => {
-      const udpDataJson = JSON.parse(udpData);
+      const udpDataJson: PrinterItem = JSON.parse(udpData);
+
+      if (udpDataJson.Id !== RESPONSE_ID) return;
+
       setData((prevData) => ({
         ...prevData,
-        [udpDataJson.Id]: udpDataJson,
+        [udpDataJson.Data.Attributes.MainboardID]: udpDataJson,
       }));
     });
 
